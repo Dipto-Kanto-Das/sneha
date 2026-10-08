@@ -1,0 +1,731 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Just for You ❤️</title>
+
+<style>
+  *{
+    box-sizing:border-box;
+    margin:0;
+    padding:0
+  }
+
+  html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden
+  }
+
+  body{
+    font-family:Georgia,"Times New Roman",serif;
+    background:radial-gradient(
+      circle at center,
+      #35102d 0%,
+      #170817 45%,
+      #08040a 100%
+    );
+    color:#fff;
+  }
+
+  .scene{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+
+  .glow{
+    position:absolute;
+    width:55vmin;
+    height:55vmin;
+    border-radius:50%;
+    background:rgba(255,70,150,.13);
+    filter:blur(50px);
+    animation:pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse{
+    50%{
+      transform:scale(1.18);
+      opacity:.65
+    }
+  }
+
+  .emoji-layer{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none
+  }
+
+  .emoji{
+    position:absolute;
+    bottom:-50px;
+    font-size:clamp(20px,4vw,38px);
+    opacity:0;
+    animation:floatUp linear infinite;
+    filter:drop-shadow(0 0 8px rgba(255,90,180,.5));
+  }
+
+  @keyframes floatUp{
+    0%{
+      transform:translateY(0) rotate(0deg) scale(.7);
+      opacity:0
+    }
+
+    12%{
+      opacity:.9
+    }
+
+    85%{
+      opacity:.65
+    }
+
+    100%{
+      transform:translateY(-115vh) rotate(360deg) scale(1.15);
+      opacity:0
+    }
+  }
+
+  .card{
+    position:relative;
+    z-index:5;
+    width:min(92vw,440px);
+    min-height:650px;
+    padding:24px 20px 28px;
+    border:1px solid rgba(255,180,220,.28);
+    border-radius:28px;
+    background:rgba(15,7,18,.58);
+    backdrop-filter:blur(14px);
+    box-shadow:0 0 60px rgba(255,30,130,.22);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .tiny{
+    font-family:Arial,sans-serif;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    font-size:11px;
+    color:#ffc5df;
+    margin-bottom:12px
+  }
+
+  .title{
+    font-size:clamp(22px,7vw,34px);
+    margin-bottom:17px;
+    text-shadow:0 0 18px rgba(255,110,190,.55);
+    text-align:center
+  }
+
+  /* PHOTO
+     Hidden before birthday midnight
+  */
+
+  .photo-wrap{
+    width:min(68vw,270px);
+    height:min(68vw,270px);
+    border-radius:50%;
+    padding:5px;
+
+    background:linear-gradient(
+      135deg,
+      #ff8fc8,
+      #fff,
+      #ff3c9d,
+      #8f4dff
+    );
+
+    box-shadow:0 0 35px rgba(255,65,170,.35);
+
+    animation:photoFloat 3.5s ease-in-out infinite;
+
+    visibility:hidden;
+  }
+
+  @keyframes photoFloat{
+    50%{
+      transform:translateY(-7px) scale(1.015)
+    }
+  }
+
+  .photo{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    object-position:center 35%;
+    display:block;
+    border:4px solid #160916;
+  }
+
+  .countdown{
+    margin-top:20px;
+    font-family:Arial,sans-serif;
+    text-align:center;
+  }
+
+  .label{
+    font-size:12px;
+    letter-spacing:2px;
+    color:#ffc5df;
+    margin-bottom:7px
+  }
+
+  #timer{
+    font-size:clamp(28px,9vw,48px);
+    font-weight:700;
+    letter-spacing:3px;
+    text-shadow:0 0 20px #ff4fa9;
+  }
+
+  .secret{
+    display:none;
+    text-align:center;
+    width:100%;
+    animation:reveal 2s ease both;
+  }
+
+  @keyframes reveal{
+    from{
+      opacity:0;
+      transform:translateY(30px) scale(.85)
+    }
+
+    to{
+      opacity:1;
+      transform:translateY(0) scale(1)
+    }
+  }
+
+  .heart{
+    width:105px;
+    height:95px;
+    position:relative;
+    margin:4px auto 8px;
+    animation:heartBeat 1.15s infinite;
+  }
+
+  .heart:before,
+  .heart:after{
+    content:"";
+    position:absolute;
+    top:10px;
+    width:54px;
+    height:82px;
+    border-radius:54px 54px 0 0;
+    background:#ff3d91;
+  }
+
+  .heart:before{
+    left:51px;
+    transform:rotate(45deg);
+    transform-origin:0 100%;
+  }
+
+  .heart:after{
+    left:0;
+    transform:rotate(-45deg);
+    transform-origin:100% 100%;
+  }
+
+  @keyframes heartBeat{
+    0%,100%{
+      transform:scale(1)
+    }
+
+    20%{
+      transform:scale(1.13)
+    }
+
+    35%{
+      transform:scale(1)
+    }
+
+    50%{
+      transform:scale(1.08)
+    }
+  }
+
+  .love-text{
+    margin-top:7px;
+    font-size:clamp(28px,8vw,44px);
+    font-weight:700;
+    line-height:1.05;
+    text-align:center;
+    color:#fff;
+
+    text-shadow:
+      0 0 8px #fff,
+      0 0 22px #ff3d91,
+      0 0 42px #ff3d91;
+  }
+
+  .love-text span{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(22px);
+    animation:letterUp .5s forwards;
+  }
+
+  @keyframes letterUp{
+    to{
+      opacity:1;
+      transform:translateY(0)
+    }
+  }
+
+  .message{
+    margin-top:15px;
+    max-width:340px;
+    font-size:15px;
+    line-height:1.6;
+    color:#ffe7f2;
+    text-align:center;
+    animation:fadeIn 2s 2.5s both;
+  }
+
+  @keyframes fadeIn{
+    from{
+      opacity:0
+    }
+
+    to{
+      opacity:1
+    }
+  }
+
+  .date{
+    margin-top:15px;
+    font-family:Arial,sans-serif;
+    font-size:11px;
+    letter-spacing:2px;
+    color:#ffb4d5;
+    animation:fadeIn 2s 3s both;
+  }
+
+  .hint{
+    position:absolute;
+    bottom:8px;
+    left:0;
+    right:0;
+    text-align:center;
+    font:10px Arial,sans-serif;
+    color:rgba(255,255,255,.35);
+  }
+
+  .burst{
+    position:absolute;
+    inset:0;
+    z-index:4;
+    pointer-events:none;
+
+    background:radial-gradient(
+      circle,
+      rgba(255,255,255,.9),
+      rgba(255,80,170,.18) 18%,
+      transparent 45%
+    );
+
+    opacity:0;
+    transform:scale(.2);
+  }
+
+  .burst.go{
+    animation:burst .9s ease-out
+  }
+
+  @keyframes burst{
+    0%{
+      opacity:0;
+      transform:scale(.2)
+    }
+
+    35%{
+      opacity:.9
+    }
+
+    100%{
+      opacity:0;
+      transform:scale(2.2)
+    }
+  }
+
+  @media(max-height:720px){
+
+    .card{
+      min-height:590px;
+      padding:16px
+    }
+
+    .photo-wrap{
+      width:210px;
+      height:210px
+    }
+
+    .title{
+      margin-bottom:10px
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+
+  <div class="glow"></div>
+
+  <div class="emoji-layer" id="emojiLayer"></div>
+
+  <div class="burst" id="burst"></div>
+
+  <main class="card">
+
+    <div class="tiny">
+      A little secret ❤️
+    </div>
+
+    <div class="title" id="topTitle">
+      Something special is waiting...
+    </div>
+
+
+    <!-- PHOTO -->
+
+    <div class="photo-wrap" id="photoWrap">
+
+      <img
+        class="photo"
+        src="sneha.jpg"
+        alt="Sneha"
+      >
+
+    </div>
+
+
+    <!-- COUNTDOWN -->
+
+    <section class="countdown" id="countdownBox">
+
+      <div class="label">
+        THE  SURPRISE OPENS AT MIDNIGHT
+      </div>
+
+      <div id="timer">
+        00:00:00
+      </div>
+
+    </section>
+
+
+    <!-- SECRET / BIRTHDAY CONTENT -->
+
+    <section class="secret" id="secret">
+
+      <div class="heart"></div>
+
+      <div class="love-text" id="loveText"></div>
+
+      <p class="message">
+        A little surprise for the sweetest sister.
+        May your birthday be filled with happiness,
+        laughter, love, and beautiful memories. ❤️
+      </p>
+
+      <div class="date">
+        HAPPY BIRTHDAY • 10 OCTOBER 2026 🎂❤️
+      </div>
+
+    </section>
+
+
+    <div class="hint" id="hint">
+      Keep this little page private 🤫
+    </div>
+
+  </main>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   BIRTHDAY TARGET
+   =========================================================
+
+   Bangladesh Time (UTC+6)
+
+   10 October 2026
+   12:00:00 AM
+
+   Countdown ends exactly at midnight.
+   ========================================================= */
+
+const TARGET =
+  new Date("2026-10-10T00:00:00+06:00");
+
+
+/* =========================================================
+   FLOATING EMOJIS
+   ========================================================= */
+
+const emojis = [
+  "❤️",
+  "💕",
+  "💗",
+  "💖",
+  "💞",
+  "💓",
+  "🥰",
+  "😘",
+  "🌸",
+  "✨",
+  "💝",
+  "🫶",
+  "🌹",
+  "🎂",
+  "🎉",
+  "🎁",
+  "🥳"
+];
+
+const layer =
+  document.getElementById("emojiLayer");
+
+
+for(let i = 0; i < 34; i++){
+
+  const e =
+    document.createElement("div");
+
+  e.className = "emoji";
+
+  e.textContent =
+    emojis[
+      Math.floor(
+        Math.random() * emojis.length
+      )
+    ];
+
+  e.style.left =
+    (Math.random() * 100) + "%";
+
+  e.style.animationDuration =
+    (7 + Math.random() * 9) + "s";
+
+  e.style.animationDelay =
+    (-Math.random() * 15) + "s";
+
+  e.style.fontSize =
+    (20 + Math.random() * 22) + "px";
+
+  layer.appendChild(e);
+}
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const timer =
+  document.getElementById("timer");
+
+const box =
+  document.getElementById("countdownBox");
+
+const secret =
+  document.getElementById("secret");
+
+const topTitle =
+  document.getElementById("topTitle");
+
+const hint =
+  document.getElementById("hint");
+
+const burst =
+  document.getElementById("burst");
+
+const loveText =
+  document.getElementById("loveText");
+
+const photoWrap =
+  document.getElementById("photoWrap");
+
+
+let revealed = false;
+
+
+/* =========================================================
+   REVEAL FUNCTION
+   ========================================================= */
+
+function reveal(){
+
+  if(revealed) return;
+
+  revealed = true;
+
+  timer.textContent = "00:00:00";
+
+  /* Birthday light burst */
+  burst.classList.add("go");
+
+
+  setTimeout(() => {
+
+    /* Hide countdown */
+    box.style.display = "none";
+
+    /* Hide waiting title */
+    topTitle.style.display = "none";
+
+
+    /* SHOW PHOTO AFTER MIDNIGHT */
+
+    photoWrap.style.visibility = "visible";
+
+
+    /* Show birthday section */
+    secret.style.display = "block";
+
+
+    /* Change bottom hint */
+    hint.textContent =
+      "Just for you, Sneha ❤️";
+
+
+    /* =====================================================
+       ANIMATED BIRTHDAY MESSAGE
+       ===================================================== */
+
+    const words = [
+      "H",
+      "a",
+      "p",
+      "p",
+      "y",
+      " ",
+      "B",
+      "i",
+      "r",
+      "t",
+      "h",
+      "d",
+      "a",
+      "y",
+      " ",
+      "S",
+      "n",
+      "e",
+      "h",
+      "a",
+      " ",
+      "🎂"
+    ];
+
+
+    loveText.innerHTML = "";
+
+
+    words.forEach((ch, i) => {
+
+      const s =
+        document.createElement("span");
+
+      s.textContent =
+        ch === " "
+          ? "\u00A0"
+          : ch;
+
+      s.style.animationDelay =
+        (i * 0.10) + "s";
+
+      loveText.appendChild(s);
+
+    });
+
+  }, 650);
+}
+
+
+/* =========================================================
+   COUNTDOWN UPDATE
+   ========================================================= */
+
+function update(){
+
+  const diff =
+    TARGET.getTime() - Date.now();
+
+
+  /* Birthday midnight reached */
+
+  if(diff <= 0){
+
+    reveal();
+
+    return;
+  }
+
+
+  /* Hours */
+
+  const h =
+    Math.floor(
+      diff / 3600000
+    );
+
+
+  /* Minutes */
+
+  const m =
+    Math.floor(
+      (diff % 3600000) / 60000
+    );
+
+
+  /* Seconds */
+
+  const s =
+    Math.floor(
+      (diff % 60000) / 1000
+    );
+
+
+  /* Display HH:MM:SS */
+
+  timer.textContent =
+    String(h).padStart(2,"0") +
+    ":" +
+    String(m).padStart(2,"0") +
+    ":" +
+    String(s).padStart(2,"0");
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+update();
+
+setInterval(
+  update,
+  1000
+);
+
+</script>
+
+</body>
+</html>
+
